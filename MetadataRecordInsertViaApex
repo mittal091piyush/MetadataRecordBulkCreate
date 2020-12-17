@@ -1,0 +1,35 @@
+Integer i = 0;
+Metadata.DeployContainer mdContainer = new Metadata.DeployContainer();
+Metadata.CustomMetadata firstMetadataRec;
+for( Split_Portfolio_obj__c eachRec : [Select id,Email__c,Law_Firm_1__c,Law_Firm_2__c,UserID__c FROM Split_Portfolio_obj__c ]){
+    i++;
+System.debug( 'Email --> '+eachRec.Email__c );
+String nameSpacePrefix =''; // if the metadata belongs to any package than include the namespace.                
+//First Record 
+firstMetadataRec =  new Metadata.CustomMetadata();
+firstMetadataRec.fullName = nameSpacePrefix + 'Protfolio_Split__mdt.Y'+i;
+firstMetadataRec.label = 'Y'+i;           
+//adding values to fields
+Metadata.CustomMetadataValue customField1 = new Metadata.CustomMetadataValue();
+customField1.field = 'Law_Firm_1__c';
+customField1.value = eachRec.Law_Firm_1__c;
+firstMetadataRec.values.add(customField1);            
+Metadata.CustomMetadataValue customField2 = new Metadata.CustomMetadataValue();
+customField2.field = 'Law_Firm_2__c';
+customField2.value = eachRec.Law_Firm_2__c;
+firstMetadataRec.values.add(customField2);                       
+Metadata.CustomMetadataValue customField3 = new Metadata.CustomMetadataValue();
+customField3.field = 'User_Id__c';
+customField3.value = eachRec.UserID__c;
+firstMetadataRec.values.add(customField3);
+Metadata.CustomMetadataValue customField4 = new Metadata.CustomMetadataValue();
+customField4.field = 'Email_Id__c';
+customField4.value = eachRec.Email__c;
+firstMetadataRec.values.add(customField4);                        
+    
+mdContainer.addMetadata(firstMetadataRec);
+
+}
+
+Metadata.Operations.enqueueDeployment(mdContainer, null);
+
